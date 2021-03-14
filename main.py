@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import make_data as mdata
 import bracket
+import bracketYear
 
 print(tf.version.VERSION)
 
@@ -58,7 +59,7 @@ def train():
 
 def predictGame(m, model):
     def predict(team1, team2):
-        inputs = mdata.getInputs(m, 2019, team1, team2)
+        inputs = mdata.getInputs(m, 2016, team1, team2)
 
         return model.predict(inputs)[0][0]
 
@@ -77,47 +78,7 @@ if __name__ == "__main__":
     # m = train()
     m, inputs, outputs, _, _ = mdata.getData()
     model = makeModel(inputs.shape[1], outputs.shape[1])
-    b = bracket.Bracket([
-        # East
-        1181, 1295, 
-        1416, 1433, 
-        1251, 1280, 
-        1439, 1387, 
-        1268, 1125, 
-        1261, 1463, 
-        1278, 1257, 
-        1277, 1133, 
-
-        # West
-        1211, 1192, 
-        1124, 1393, 
-        1293, 1266, 
-        1199, 1436, 
-        1138, 1113, 
-        1403, 1297, 
-        1196, 1305, 
-        1276, 1285, 
-
-        # South
-        1438, 1205, 
-        1328, 1279, 
-        1332, 1458, 
-        1414, 1243, 
-        1437, 1388, 
-        1345, 1330, 
-        1234, 1153, 
-        1397, 1159, 
-
-        # Midwest
-        1314, 1233, 
-        1449, 1429, 
-        1120, 1308, 
-        1242, 1318, 
-        1326, 1235, 
-        1222, 1209, 
-        1459, 1371, 
-        1246, 1101, 
-    ], predictGame(m, model), convertTeamToStr(m))
+    b = bracket.Bracket(bracketYear.the2016Bracket, predictGame(m, model), convertTeamToStr(m))
 
     b.playTourne()
 

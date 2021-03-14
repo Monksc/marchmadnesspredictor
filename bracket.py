@@ -26,10 +26,10 @@ class Bracket:
         print(self)
         while len(self.teams) > 1:
             self.playRound()
-            print("\n\nPLAYING ROUND: ", len(self.teams))
+            print("PLAYING ROUND: ", len(self.teams))
             print(self)
 
-        print("\n\nWinner: ", self.convertTeamToStr(self.teams[0][0]), "%.3f" % (self.teams[0][1]))
+        print("Winner: ", self.convertTeamToStr(self.teams[0][0]), "%.3f" % (self.teams[0][1]))
 
     def __str__(self):
         s = ''
