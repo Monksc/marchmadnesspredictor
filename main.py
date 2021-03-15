@@ -57,9 +57,9 @@ def train():
 
     return m
 
-def predictGame(m, model):
+def predictGame(m, model, year):
     def predict(team1, team2):
-        inputs = mdata.getInputs(m, 2016, team1, team2)
+        inputs = mdata.getInputs(m, year, team1, team2)
 
         return model.predict(inputs)[0][0]
 
@@ -78,7 +78,10 @@ if __name__ == "__main__":
     # m = train()
     m, inputs, outputs, _, _ = mdata.getData()
     model = makeModel(inputs.shape[1], outputs.shape[1])
-    b = bracket.Bracket(bracketYear.the2016Bracket, predictGame(m, model), convertTeamToStr(m))
+
+    # May change bracketYear to reflect the final bracket you want
+    #       and change the year to the year you want.
+    b = bracket.Bracket(bracketYear.the2021Bracket, predictGame(m, model, 2021), convertTeamToStr(m))
 
     b.playTourne()
 
