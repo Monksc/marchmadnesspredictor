@@ -1,4 +1,5 @@
 from sklearn import svm
+import seaborn as sns
 from joblib import dump, load
 import tensorflow as tf
 import keras
@@ -131,9 +132,9 @@ if __name__ == "__main__":
     b.playTourne()
     b = bracket.Bracket(bracketYear.the2019Bracket, predictGame(m, model, 2019), convertTeamToStr(m))
     b.playTourne()
-    b = bracket.Bracket(bracketYear.the2021Bracket,
-            predictGame(m, model, 2020), convertTeamToStr(m))
-    b.playTourne()
+    #b = bracket.Bracket(bracketYear.the2021Bracket,
+    #        predictGame(m, model, 2020), convertTeamToStr(m))
+    #b.playTourne()
 
     b = bracket.Bracket(bracketYear.the2021Bracket, predictGame(m, model, 2021), convertTeamToStr(m))
 

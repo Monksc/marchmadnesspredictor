@@ -304,16 +304,16 @@ def getData():
                 addWinPercentToInputs('Wins0'),
             ])
 
-    training_inputs = np.array(inputs[:2117])
-    training_outputs = np.array(outputs[:2117])
+    #training_inputs = np.array(inputs[:2117])
+    #training_outputs = np.array(outputs[:2117])
 
-    testing_inputs = np.array(inputs[2117:])
-    testing_outputs = np.array(outputs[2117:])
+    #testing_inputs = np.array(inputs[2117:])
+    #testing_outputs = np.array(outputs[2117:])
     
-    # training_inputs = np.array(inputs)
-    # training_outputs = np.array(outputs)
-    # testing_inputs = np.array(inputs)
-    # testing_outputs = np.array(outputs)
+    training_inputs = np.array(inputs)
+    training_outputs = np.array(outputs)
+    testing_inputs = np.array(inputs)
+    testing_outputs = np.array(outputs)
 
     return m, training_inputs, training_outputs, testing_inputs, testing_outputs
 
