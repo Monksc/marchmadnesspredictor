@@ -11,13 +11,16 @@ class Bracket:
         newTeams = []
         for i in range(len(self.teams)//2):
             prob1 = self.getProbs(self.teams[i*2][0], self.teams[i*2+1][0])
-            prob2 = 1.0 - self.getProbs(self.teams[i*2+1][0], self.teams[i*2][0])
+            prob2 = 1.0 - self.getProbs(self.teams[i*2+1][0],
+                    self.teams[i*2][0])
             prob = (prob1 + prob2) / 2.0
 
             if prob * self.teams[i*2][1] > (1.0-prob) * self.teams[i*2+1][1]:
-                newTeams.append((self.teams[i*2][0], prob * self.teams[i*2][1]))
+                newTeams.append((self.teams[i*2][0],
+                    prob * self.teams[i*2][1]))
             else:
-                newTeams.append((self.teams[i*2+1][0], (1.0-prob) * self.teams[i*2+1][1]))
+                newTeams.append((self.teams[i*2+1][0],
+                    (1.0-prob) * self.teams[i*2+1][1]))
 
         self.teams = newTeams
 
@@ -29,7 +32,8 @@ class Bracket:
             print("PLAYING ROUND: ", len(self.teams))
             print(self)
 
-        print("Winner: ", self.convertTeamToStr(self.teams[0][0]), "%.3f" % (self.teams[0][1]))
+        print("Winner: ", self.convertTeamToStr(self.teams[0][0]),
+                "%.3f" % (self.teams[0][1]))
 
     def __str__(self):
         s = ''
@@ -42,10 +46,12 @@ class Bracket:
             prob2 = self.teams[i*2+1][1]
 
             cprob1 = self.getProbs(self.teams[i*2][0], self.teams[i*2+1][0])
-            cprob2 = 1.0 - self.getProbs(self.teams[i*2+1][0], self.teams[i*2][0])
+            cprob2 = 1.0 - self.getProbs(self.teams[i*2+1][0],
+                    self.teams[i*2][0])
             cprob = (cprob1 + cprob2) / 2.0
 
-            s += '%20s %5.2f vs %-5.2f %-20s\t\t%.2f\n' % (team1, prob1, prob2, team2, cprob)
+            s += '%20s %5.2f vs %-5.2f %-20s\t\t%.2f\n' % (team1,
+                    prob1, prob2, team2, cprob)
 
 
         return s

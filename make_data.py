@@ -19,19 +19,22 @@ class MakeData:
         self.readTeamIdToLeagueId()
         self.createYearToLeagueStats()
 
-    def readTeamIdToTeamName(self, fileName='data/MTeams.csv', teamId='TeamID', teamName='TeamName'):
+    def readTeamIdToTeamName(self, fileName='data/MTeams.csv',
+            teamId='TeamID', teamName='TeamName'):
         data = pd.read_csv('data/MTeams.csv')
         for i in range(len(data[teamId])):
             if data[teamId][i] not in self.teamid_to_teamname:
                 self.teamid_to_teamname[data[teamId][i]] = data[teamName][i]
 
-    def readTeamIdToLeagueId(self, fileName='data/MTeams.csv', teamId='TeamID', year='Season', league='ConfAbbrev'):
+    def readTeamIdToLeagueId(self, fileName='data/MTeams.csv',
+            teamId='TeamID', year='Season', league='ConfAbbrev'):
         data = pd.read_csv('data/MTeamConferences.csv')
         for i in range(len(data[teamId])):
             if data[year][i] not in self.year_to_teamid_to_leagueid:
                 self.year_to_teamid_to_leagueid[data[year][i]] = {}
 
-            self.year_to_teamid_to_leagueid[data[year][i]][data[teamId][i]] = data[league][i]
+            self.year_to_teamid_to_leagueid[
+                    data[year][i]][data[teamId][i]] = data[league][i]
 
 
     def createYearToLeagueStats(self):
@@ -53,7 +56,8 @@ class MakeData:
 
 
 
-    def createInputsAndOutputs(self, data, setupFuncs, createDataFuncs, collectInputFuncs, getYear=getParam("Season"),
+    def createInputsAndOutputs(self, data, setupFuncs, createDataFuncs,
+            collectInputFuncs, getYear=getParam("Season"),
             getWTeamId=getParam("WTeamID"), getWScore=getParam("WScore"),
             getLTeamId=getParam("LTeamID"), getLScore=getParam("LScore")):
 
@@ -68,6 +72,8 @@ class MakeData:
                 print(i, '/', len(data), i / len(data))
              
             season = getYear(data, i)
+            #if season < 2015:
+            #    continue
             wId = getWTeamId(data, i)
             wScore = getWScore(data, i)
             lId = getLTeamId(data, i)
@@ -117,11 +123,14 @@ def setUpPageRank(name):
         for year in self.year_to_teamid_to_leagueid:
             for leagueId in self.year_to_league_stats[year]:
                 teamCount = len(self.year_to_league_stats[year])
-                self.year_to_stats[year][name] = [[0.0 for i in range(teamCount)] for j in range(teamCount)]
+                self.year_to_stats[year][name] = [
+                        [0.0 for i in range(teamCount)] for j in range(teamCount)]
             for teamId in self.year_to_teamid_to_leagueid[year]:
                 leagueId = self.year_to_teamid_to_leagueid[year][teamId]
-                teamCount = len(self.year_to_league_stats[year][leagueId]['indexToTeam'])
-                self.year_to_league_stats[year][leagueId][name] = [[0.0 for i in range(teamCount)] for j in range(teamCount)]
+                teamCount = len(
+                        self.year_to_league_stats[year][leagueId]['indexToTeam'])
+                self.year_to_league_stats[year][leagueId][name] = [
+                        [0.0 for i in range(teamCount)] for j in range(teamCount)]
     return f
 
 def updatePageRank(name, winsMultiplier, goalsMultiplier):
@@ -134,13 +143,23 @@ def updatePageRank(name, winsMultiplier, goalsMultiplier):
             self.year_to_league_stats[season][wLeagueId][name][lIndex][wIndex] += wScore * goalsMultiplier
             self.year_to_league_stats[season][wLeagueId][name][wIndex][lIndex] += lScore * goalsMultiplier
         else:
-            self.year_to_stats[season][name][lLeagueIndex][wLeagueIndex] += winsMultiplier
-            self.year_to_stats[season][name][lLeagueIndex][wLeagueIndex] += wScore * goalsMultiplier
-            self.year_to_stats[season][name][wLeagueIndex][lLeagueIndex] += lScore * goalsMultiplier
+
+            wA = np.array(self.year_to_league_stats[season][wLeagueId][name])
+            wR = pagerank.rank(wA)
+            wRank = wR[wIndex][0]
+
+            lA = np.array(self.year_to_league_stats[season][lLeagueId][name])
+            lR = pagerank.rank(lA)
+            lRank = lR[lIndex][0]
+
+            self.year_to_stats[season][name][lLeagueIndex][wLeagueIndex] += lRank * winsMultiplier
+            self.year_to_stats[season][name][lLeagueIndex][wLeagueIndex] += lRank * wScore * goalsMultiplier
+            self.year_to_stats[season][name][wLeagueIndex][lLeagueIndex] += wRank * lScore * goalsMultiplier
 
 
     return f
 
+verbal = False
 def addPageRankToInputs(name):
     def f(self, new_input, season,
         wLeagueId, wLeagueIndex, wIndex, wScore,
@@ -161,6 +180,14 @@ def addPageRankToInputs(name):
         R = pagerank.rank(A)
         new_input.append(R[wLeagueIndex][0])
         new_input.append(R[lLeagueIndex][0])
+
+        #global verbal
+        #if verbal:
+        #    print(wA)
+        #    print(A)
+        #    print(R)
+        #    print("%10s %5.2f %5.2f" % ('TEAM', wR[wIndex][0], lR[lIndex][0]))
+        #    print("%10s %5.2f %5.2f" % ('LEAGUE', R[wLeagueIndex][0], R[lLeagueIndex][0]))
 
     return f
 
@@ -217,19 +244,19 @@ def addInInputsOutputs(m, data):
             data,
             [
                 setUpPageRank('PageRankWins'), 
-                setUpPageRank('PageRankGoals'), 
+                #setUpPageRank('PageRankGoals'), 
                 setUpWinPercent('Wins10'),
                 setUpWinPercent('Wins0'),
             ],
             [
                 updatePageRank('PageRankWins', 1.0, 0.0),
-                updatePageRank('PageRankGoals', 0.0, 1.0),
+                #updatePageRank('PageRankGoals', 0.0, 1.0),
                 updateWinPercent('Wins10', 10),
                 updateWinPercent('Wins0', 0),
             ],
             [
                 addPageRankToInputs('PageRankWins'),
-                addPageRankToInputs('PageRankGoals'),
+                #addPageRankToInputs('PageRankGoals'),
                 addWinPercentToInputs('Wins10'),
                 addWinPercentToInputs('Wins0'),
             ])
@@ -241,16 +268,52 @@ def getData():
     m = MakeData()
 
     data = pd.read_csv('data/MRegularSeasonCompactResults.csv')
-    inputs, outputs = addInInputsOutputs(m, data)
+    inputs, outputs = m.createInputsAndOutputs(
+            data,
+            [
+                setUpPageRank('PageRankWins'), 
+                #setUpPageRank('PageRankGoals'), 
+                setUpWinPercent('Wins10'),
+                setUpWinPercent('Wins0'),
+            ],
+            [
+                updatePageRank('PageRankWins', 1.0, 0.0),
+                #updatePageRank('PageRankGoals', 0.0, 1.0),
+                updateWinPercent('Wins10', 10),
+                updateWinPercent('Wins0', 0),
+            ],
+            [
+                addPageRankToInputs('PageRankWins'),
+                #addPageRankToInputs('PageRankGoals'),
+                addWinPercentToInputs('Wins10'),
+                addWinPercentToInputs('Wins0'),
+            ])
+
+    global verbal
+    verbal = True
 
     data = pd.read_csv('data/MNCAATourneyCompactResults.csv')
-    inputs, outputs = addInInputsOutputs(m, data)
+    inputs, outputs = m.createInputsAndOutputs(
+            data,
+            [],
+            [],
+            [
+                addPageRankToInputs('PageRankWins'),
+                #addPageRankToInputs('PageRankGoals'),
+                addWinPercentToInputs('Wins10'),
+                addWinPercentToInputs('Wins0'),
+            ])
 
     training_inputs = np.array(inputs[:2117])
     training_outputs = np.array(outputs[:2117])
 
     testing_inputs = np.array(inputs[2117:])
     testing_outputs = np.array(outputs[2117:])
+    
+    # training_inputs = np.array(inputs)
+    # training_outputs = np.array(outputs)
+    # testing_inputs = np.array(inputs)
+    # testing_outputs = np.array(outputs)
 
     return m, training_inputs, training_outputs, testing_inputs, testing_outputs
 
@@ -264,7 +327,7 @@ def getInputs(m, season, team1, team2):
     inputs, _ = m.createInputsAndOutputs(
             data, [], [], [
                 addPageRankToInputs('PageRankWins'),
-                addPageRankToInputs('PageRankGoals'),
+                #addPageRankToInputs('PageRankGoals'),
                 addWinPercentToInputs('Wins10'),
                 addWinPercentToInputs('Wins0'),
             ])
@@ -273,6 +336,5 @@ def getInputs(m, season, team1, team2):
 
 
 if __name__ == "__main__":
-
     m, training_inputs, training_outputs, testing_inputs, testing_outputs = getData()
 
