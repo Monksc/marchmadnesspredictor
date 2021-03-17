@@ -91,7 +91,7 @@ def train(model, m, training_inputs, training_outputs, testing_inputs, testing_o
     plot.savefig('plot.png')
 
     #model.save_weights("saved_model/model2.ckpt")
-    dump(model, 'model-svm2.joblib')
+    #dump(model, 'model-svm2.joblib')
 
     return m, model
 

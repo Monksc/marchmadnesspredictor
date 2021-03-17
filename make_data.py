@@ -121,10 +121,9 @@ class MakeData:
 def setUpPageRank(name):
     def f(self):
         for year in self.year_to_teamid_to_leagueid:
-            for leagueId in self.year_to_league_stats[year]:
-                teamCount = len(self.year_to_league_stats[year])
-                self.year_to_stats[year][name] = [
-                        [0.0 for i in range(teamCount)] for j in range(teamCount)]
+            teamCount = len(self.year_to_league_stats[year])
+            self.year_to_stats[year][name] = [
+                    [0.0 for i in range(teamCount)] for j in range(teamCount)]
             for teamId in self.year_to_teamid_to_leagueid[year]:
                 leagueId = self.year_to_teamid_to_leagueid[year][teamId]
                 teamCount = len(
@@ -197,10 +196,12 @@ def addPageRankToInputs(name):
 def setUpWinPercent(name):
     def f(self):
         for year in self.year_to_teamid_to_leagueid:
+            self.year_to_stats[year][name] = {}
             if year not in self.year_to_league_stats:
                 self.year_to_league_stats[year] = {}
             for teamId in self.year_to_teamid_to_leagueid[year]:
                 leagueId = self.year_to_teamid_to_leagueid[year][teamId]
+                self.year_to_stats[year][name][leagueId] = []
                 teamCount = len(self.year_to_league_stats[year][leagueId]['indexToTeam'])
                 self.year_to_league_stats[year][leagueId][name] = [[] for j in range(teamCount)]
     return f
@@ -214,6 +215,12 @@ def updateWinPercent(name, gamesUsing=0):
         self.year_to_league_stats[season][wLeagueId][name][wIndex] = self.year_to_league_stats[season][wLeagueId][name][wIndex][-gamesUsing:]
         self.year_to_league_stats[season][lLeagueId][name][lIndex].append(0.0)
         self.year_to_league_stats[season][lLeagueId][name][lIndex] = self.year_to_league_stats[season][lLeagueId][name][lIndex][-gamesUsing:]
+
+        # Season
+        self.year_to_stats[season][name][wLeagueId].append(1.0)
+        self.year_to_stats[season][name][lLeagueId].append(0.0)
+        self.year_to_stats[season][name][wLeagueId] = self.year_to_stats[season][name][wLeagueId][-gamesUsing:]
+        self.year_to_stats[season][name][lLeagueId] = self.year_to_stats[season][name][lLeagueId][-gamesUsing:]
 
     return f
 
@@ -229,6 +236,22 @@ def addWinPercentToInputs(name):
 
         lWins = np.array(self.year_to_league_stats[season][lLeagueId][name][lIndex]).sum()
         lTotal = len(self.year_to_league_stats[season][lLeagueId][name][lIndex])
+        if lTotal == 0:
+            lTotal = 1
+
+        new_input.append(wWins / wTotal)
+        new_input.append(lWins / lTotal)
+
+
+        # Seasons
+
+        wWins = np.array(self.year_to_stats[season][name][wLeagueId]).sum()
+        wTotal = len(self.year_to_stats[season][name][wLeagueId])
+        if wTotal == 0:
+            wTotal = 1
+
+        lWins = np.array(self.year_to_stats[season][name][lLeagueId]).sum()
+        lTotal = len(self.year_to_stats[season][name][lLeagueId])
         if lTotal == 0:
             lTotal = 1
 
@@ -268,7 +291,7 @@ def getData():
     m = MakeData()
 
     data = pd.read_csv('data/MRegularSeasonCompactResults.csv')
-    inputs, outputs = m.createInputsAndOutputs(
+    m.createInputsAndOutputs(
             data,
             [
                 setUpPageRank('PageRankWins'), 
@@ -282,11 +305,11 @@ def getData():
                 updateWinPercent('Wins10', 10),
                 updateWinPercent('Wins0', 0),
             ],
-            [
-                addPageRankToInputs('PageRankWins'),
-                #addPageRankToInputs('PageRankGoals'),
-                addWinPercentToInputs('Wins10'),
-                addWinPercentToInputs('Wins0'),
+            [# No need to add data when we dont use it
+                #addPageRankToInputs('PageRankWins'),
+                ##addPageRankToInputs('PageRankGoals'),
+                #addWinPercentToInputs('Wins10'),
+                #addWinPercentToInputs('Wins0'),
             ])
 
     global verbal
