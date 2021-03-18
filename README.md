@@ -1,6 +1,15 @@
 
 # NCAA March Madness bracket 2021 challenge
 
+# How it works
+Originally it used the page rank algorithm to rank each indivisual team
+in each league compared to the league. It also ranked each league and added in
+winning percentage for the league vs other leagues and teams vs other teams in the
+league. Also winning percentage for the last 10 games.
+I then used a neural network but switched to a svm. The page ranked seemed
+useless to the svm and when I viewed how good it was by using seaborn it seemed
+the page rank was indeed useless so I removed them.
+
 # Note
 The pagerank.py file is a link to https://github.com/Monksc/EnglishPremierLeaguePredictions/blob/main/pagerank.py
 
@@ -94,3 +103,16 @@ PLAYING ROUND:  1
 
 Winner:  Gonzaga 0.319
 ```
+
+# Images to view the data
+
+Decision Boundary
+![Decision Boundary](teamAvsBWinningPercenage-descition-boundary.png)
+
+
+Correlation Graph of Inputs
+![Correlation Inputs](teamAvsBWinningPercenage-correlation.png)
+
+
+Correlation Graph of Inputs Of Orginal Data
+![Correlation Inputs Of Original Data](originaldata-correlation.png)
