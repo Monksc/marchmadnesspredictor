@@ -1,5 +1,6 @@
 from sklearn import svm
 import seaborn as sns
+import matplotlib.pyplot as plt
 from joblib import dump, load
 import tensorflow as tf
 import keras
@@ -42,7 +43,9 @@ def makeModel(input_len, output_len):
     #model.load_weights('saved_model/model2.ckpt')
 
     C = 200
-    model = svm.SVC(kernel='poly', degree=3, gamma='auto', C=C, probability=True)
+    #C = 2**15
+    #C = 0.1 ** 8
+    model = svm.SVC(kernel='poly', degree=3, gamma='auto', C=C, probability=True, verbose=True) #, max_iter=10_000)
 
     #model = load('model-svm1.joblib')
 
@@ -56,6 +59,7 @@ def train(model, m, training_inputs, training_outputs, testing_inputs, testing_o
             testing_inputs.shape, testing_outputs.shape)
 
     model = model.fit(training_inputs, training_outputs.flatten())
+    print('MODEL IS FIT')
     #model.fit(training_inputs, training_outputs, batch_size=128,
     #        epochs=128, verbose=1)
 
@@ -68,27 +72,82 @@ def train(model, m, training_inputs, training_outputs, testing_inputs, testing_o
     lTRank = []
     wLRank = []
     lLRank = []
-    wWinTen = []
-    lWinTen = []
-    wWinZero = []
-    lWinZero = []
+    wGTRank = []
+    lGTRank = []
+    wGLRank = []
+    lGLRank = []
+    wTWinTen = []
+    lTWinTen = []
+    wSWinTen = []
+    lSWinTen = []
+    wTWinZero = []
+    lTWinZero = []
+    wSWinZero = []
+    lSWinZero = []
     didWin = []
 
-    for i in range(len(training_inputs)):
-        wTRank.append(training_inputs[i][0])
-        lTRank.append(training_inputs[i][1])
-        wLRank.append(training_inputs[i][2])
-        lLRank.append(training_inputs[i][3])
-        wWinTen.append(training_inputs[i][4])
-        lWinTen.append(training_inputs[i][5])
-        wWinZero.append(training_inputs[i][6])
-        lWinZero.append(training_inputs[i][7])
+    for i in range(0):#len(training_inputs)):
+        index = 0
+        #wTRank.append(training_inputs[i][index])
+        #index += 1
+        #lTRank.append(training_inputs[i][index])
+        #index += 1
+        #wLRank.append(training_inputs[i][index])
+        #index += 1
+        #lLRank.append(training_inputs[i][index])
+        #index += 1
+        #wGTRank.append(training_inputs[i][index])
+        #index += 1
+        #lGTRank.append(training_inputs[i][index])
+        #index += 1
+        #wGLRank.append(training_inputs[i][index])
+        #index += 1
+        #lGLRank.append(training_inputs[i][index])
+        #index += 1
+        wTWinTen.append(training_inputs[i][index])
+        index += 1
+        lTWinTen.append(training_inputs[i][index])
+        index += 1
+        wSWinTen.append(training_inputs[i][index])
+        index += 1
+        lSWinTen.append(training_inputs[i][index])
+        index += 1
+        wTWinZero.append(training_inputs[i][index])
+        index += 1
+        lTWinZero.append(training_inputs[i][index])
+        index += 1
+        wSWinZero.append(training_inputs[i][index])
+        index += 1
+        lSWinZero.append(training_inputs[i][index])
+        index += 1
         didWin.append(training_outputs[i][0])
+        index += 1
 
-    df = pd.DataFrame({'WinTeamRank': wTRank, 'LossTeamRank': lTRank, 'WinLeagueRank': wLRank, 'LossLeagueRank': lLRank, 'WinWinPercentage10': wWinTen, 'LossWinPercentage10': lWinTen, 'WinWinPercentage': wWinZero, 'LossWinPercentage': lWinZero, 'didWin': didWin})
+    #df = pd.DataFrame({
+    #    'WinTeamRank': wTRank,
+    #    'LossTeamRank': lTRank,
+    #    'WinLeagueRank': wLRank,
+    #    'LossLeagueRank': lLRank,
+    #    'WinTeamGoalsRank': wGTRank,
+    #    'LossTeamGoalsRank': lGTRank,
+    #    'WinLeagueGoalsRank': wGLRank,
+    #    'LossLeagueGoalsRank': lGLRank,
+    #    #'WinTSeasonWinPercentage10': wTWinTen,
+    #    #'LossTWinPercentage10': lTWinTen,
+    #    #'WinSWinPercentage10': wSWinTen,
+    #    #'LossSWinPercentage10': lSWinTen,
+    #    #'WinTWinPercentage': wTWinZero,
+    #    #'LossTWinPercentage': lTWinZero,
+    #    #'WinSWinPercentage': wSWinZero,
+    #    #'LossSWinPercentage': lSWinZero,
+    #    'didWin': didWin,
+    #    })
 
-    plot = sns.pairplot(df, hue='didWin')
-    plot.savefig('plot.png')
+    #plot = sns.pairplot(df, hue='didWin')
+    #plot.show()
+    #plot.savefig('plot2.png')
+
+
 
     #model.save_weights("saved_model/model2.ckpt")
     #dump(model, 'model-svm2.joblib')
@@ -124,6 +183,7 @@ if __name__ == "__main__":
     _, model = train(model, m, training_inputs, training_outputs, test_inputs, test_outputs)
     #model = makeModel(inputs.shape[1], outputs.shape[1])
 
+    print('HERE')
     # May change bracketYear to reflect the final bracket you want
     #       and change the year to the year you want.
     b = bracket.Bracket(bracketYear.the2016Bracket, predictGame(m, model, 2016), convertTeamToStr(m))
