@@ -1,0 +1,9 @@
+.git
+*.swp
+saved_model
+__pycache__
+data
+old_data
+*.png
+*.joblib
+.DS_Store
