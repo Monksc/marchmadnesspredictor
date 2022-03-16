@@ -218,4 +218,7 @@ if __name__ == "__main__":
     b = bracket.Bracket(bracketYear.the2021SecondChanceBracket, predictGame(m, model, 2021), convertTeamToStr(m))
     b.playTourne()
 
+    b = bracket.Bracket(bracketYear.the2022Bracket, predictGame(m, model, 2022), convertTeamToStr(m))
+    b.playTourne()
+
 

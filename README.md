@@ -104,6 +104,7 @@ PLAYING ROUND:  1
 Winner:  Gonzaga 0.319
 ```
 
+
 # Images to view the data
 
 Decision Boundary
@@ -116,3 +117,99 @@ Correlation Graph of Inputs
 
 Correlation Graph of Inputs Of Orginal Data
 ![Correlation Inputs Of Original Data](originaldata-correlation.png)
+
+# Images to view the data
+
+Decision Boundary
+![Decision Boundary](teamAvsBWinningPercenage-descition-boundary.png)
+
+
+Correlation Graph of Inputs
+![Correlation Inputs](teamAvsBWinningPercenage-correlation.png)
+
+
+Correlation Graph of Inputs Of Orginal Data
+![Correlation Inputs Of Original Data](originaldata-correlation.png)
+
+
+# Results for 2022
+```
+FIRST ROUND  64
+             Gonzaga  1.00 vs 1.00  Georgia St                          0.84
+            Boise St  1.00 vs 1.00  Memphis                             0.66
+         Connecticut  1.00 vs 1.00  New Mexico St                       0.63
+            Arkansas  1.00 vs 1.00  Vermont                             0.72
+             Alabama  1.00 vs 1.00  Rutgers                             0.55
+          Texas Tech  1.00 vs 1.00  Montana St                          0.78
+         Michigan St  1.00 vs 1.00  Davidson                            0.37
+                Duke  1.00 vs 1.00  CS Fullerton                        0.85
+              Baylor  1.00 vs 1.00  Norfolk St                          0.92
+      North Carolina  1.00 vs 1.00  Marquette                           0.62
+        St Mary's CA  1.00 vs 1.00  Wyoming                             0.43
+                UCLA  1.00 vs 1.00  Akron                               0.73
+               Texas  1.00 vs 1.00  Virginia Tech                       0.64
+              Purdue  1.00 vs 1.00  Yale                                0.90
+           Murray St  1.00 vs 1.00  San Francisco                       0.56
+            Kentucky  1.00 vs 1.00  St Peter's                          0.86
+             Arizona  1.00 vs 1.00  Wright St                           0.92
+          Seton Hall  1.00 vs 1.00  TCU                                 0.51
+             Houston  1.00 vs 1.00  UAB                                 0.69
+            Illinois  1.00 vs 1.00  Chattanooga                         0.57
+         Colorado St  1.00 vs 1.00  Michigan                            0.75
+           Tennessee  1.00 vs 1.00  Longwood                            0.85
+             Ohio St  1.00 vs 1.00  Loyola-Chicago                      0.52
+           Villanova  1.00 vs 1.00  Delaware                            0.83
+              Kansas  1.00 vs 1.00  TX Southern                         0.97
+        San Diego St  1.00 vs 1.00  Creighton                           0.55
+                Iowa  1.00 vs 1.00  Richmond                            0.72
+          Providence  1.00 vs 1.00  S Dakota St                         0.68
+                 LSU  1.00 vs 1.00  Iowa St                             0.52
+           Wisconsin  1.00 vs 1.00  Colgate                             0.88
+                 USC  1.00 vs 1.00  Miami FL                            0.63
+              Auburn  1.00 vs 1.00  Jacksonville St                     0.92
+
+PLAYING ROUND:  32
+             Gonzaga  0.84 vs 0.66  Boise St                            0.58
+         Connecticut  0.63 vs 0.72  Arkansas                            0.41
+             Alabama  0.55 vs 0.78  Texas Tech                          0.28
+            Davidson  0.63 vs 0.85  Duke                                0.44
+              Baylor  0.92 vs 0.62  North Carolina                      0.75
+             Wyoming  0.57 vs 0.73  UCLA                                0.46
+               Texas  0.64 vs 0.90  Purdue                              0.39
+           Murray St  0.56 vs 0.86  Kentucky                            0.36
+             Arizona  0.92 vs 0.51  Seton Hall                          0.72
+             Houston  0.69 vs 0.57  Illinois                            0.62
+         Colorado St  0.75 vs 0.85  Tennessee                           0.42
+             Ohio St  0.52 vs 0.83  Villanova                           0.32
+              Kansas  0.97 vs 0.55  San Diego St                        0.75
+                Iowa  0.72 vs 0.68  Providence                          0.39
+                 LSU  0.52 vs 0.88  Wisconsin                           0.38
+                 USC  0.63 vs 0.92  Auburn                              0.33
+
+PLAYING ROUND:  16
+             Gonzaga  0.49 vs 0.43  Arkansas                            0.52
+          Texas Tech  0.57 vs 0.48  Duke                                0.53
+              Baylor  0.70 vs 0.40  UCLA                                0.71
+              Purdue  0.55 vs 0.55  Kentucky                            0.45
+             Arizona  0.67 vs 0.43  Houston                             0.58
+           Tennessee  0.49 vs 0.56  Villanova                           0.56
+              Kansas  0.73 vs 0.41  Providence                          0.58
+           Wisconsin  0.55 vs 0.62  Auburn                              0.37
+
+PLAYING ROUND:  8
+             Gonzaga  0.25 vs 0.30  Texas Tech                          0.50
+              Baylor  0.50 vs 0.31  Kentucky                            0.59
+             Arizona  0.39 vs 0.27  Tennessee                           0.54
+              Kansas  0.42 vs 0.39  Auburn                              0.54
+
+PLAYING ROUND:  4
+          Texas Tech  0.15 vs 0.29  Baylor                              0.37
+             Arizona  0.21 vs 0.23  Kansas                              0.45
+
+PLAYING ROUND:  2
+              Baylor  0.18 vs 0.12  Kansas                              0.48
+
+PLAYING ROUND:  1
+
+Winner:  Baylor 0.088
+```
