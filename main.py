@@ -45,7 +45,8 @@ def makeModel(input_len, output_len):
     C = 200
     #C = 2**15
     #C = 0.1 ** 8
-    model = svm.SVC(kernel='poly', degree=3, gamma='auto', C=C, probability=True, verbose=True) #, max_iter=10_000)
+    #model = svm.SVC(kernel='poly', degree=3, gamma='auto', C=C, probability=True) #, verbose=True) #, max_iter=10_000)
+    model = svm.SVC(kernel='rbf', probability=True) #, verbose=True) #, max_iter=10_000)
 
     #model = load('model-svm1.joblib')
 
@@ -175,6 +176,22 @@ def convertTeamToStr(m):
 
     return convert
 
+
+def testStuff(training_inputs, training_outputs, transform):
+    correct = 0
+    wrong = 0
+
+    for i in range(len(training_inputs)):
+        h = transform(training_inputs[i][0], training_inputs[i][2])
+        a = transform(training_inputs[i][1], training_inputs[i][3])
+
+        if h > a and training_outputs[i][0] == 1 or h < a and training_outputs[i][0] == 0:
+            correct += 1
+        else:
+            wrong += 1
+
+    return correct, wrong
+
 if __name__ == "__main__":
 
     m, training_inputs, training_outputs, test_inputs, test_outputs = mdata.getData()
@@ -183,7 +200,6 @@ if __name__ == "__main__":
     _, model = train(model, m, training_inputs, training_outputs, test_inputs, test_outputs)
     #model = makeModel(inputs.shape[1], outputs.shape[1])
 
-    print('HERE')
     # May change bracketYear to reflect the final bracket you want
     #       and change the year to the year you want.
     b = bracket.Bracket(bracketYear.the2016Bracket, predictGame(m, model, 2016), convertTeamToStr(m))
@@ -197,7 +213,9 @@ if __name__ == "__main__":
     #b.playTourne()
 
     b = bracket.Bracket(bracketYear.the2021Bracket, predictGame(m, model, 2021), convertTeamToStr(m))
+    b.playTourne()
 
+    b = bracket.Bracket(bracketYear.the2021SecondChanceBracket, predictGame(m, model, 2021), convertTeamToStr(m))
     b.playTourne()
 
 

@@ -138,22 +138,22 @@ def updatePageRank(name, winsMultiplier, goalsMultiplier):
         lLeagueId, lLeagueIndex, lIndex, lScore):
 
         if wLeagueId == lLeagueId:
-            self.year_to_league_stats[season][wLeagueId][name][lIndex][wIndex] += 10 * winsMultiplier
-            self.year_to_league_stats[season][wLeagueId][name][lIndex][wIndex] += 10 * wScore * goalsMultiplier
-            self.year_to_league_stats[season][wLeagueId][name][wIndex][lIndex] += 10 * lScore * goalsMultiplier
+            self.year_to_league_stats[season][wLeagueId][name][lIndex][wIndex] += winsMultiplier
+            self.year_to_league_stats[season][wLeagueId][name][lIndex][wIndex] += wScore * goalsMultiplier
+            self.year_to_league_stats[season][wLeagueId][name][wIndex][lIndex] += lScore * goalsMultiplier
         else:
 
             wA = np.array(self.year_to_league_stats[season][wLeagueId][name])
-            wR = pagerank.rank(wA, 8)
+            wR = pagerank.rank(wA, 2)
             wRank = wR[wIndex][0]
 
             lA = np.array(self.year_to_league_stats[season][lLeagueId][name])
-            lR = pagerank.rank(lA, 8)
+            lR = pagerank.rank(lA, 2)
             lRank = lR[lIndex][0]
 
-            self.year_to_stats[season][name][lLeagueIndex][wLeagueIndex] += 100 * lRank * winsMultiplier
-            self.year_to_stats[season][name][lLeagueIndex][wLeagueIndex] += 100 * lRank * wScore * goalsMultiplier
-            self.year_to_stats[season][name][wLeagueIndex][lLeagueIndex] += 100 * wRank * lScore * goalsMultiplier
+            self.year_to_stats[season][name][lLeagueIndex][wLeagueIndex] += lRank * winsMultiplier
+            self.year_to_stats[season][name][lLeagueIndex][wLeagueIndex] += lRank * wScore * goalsMultiplier
+            self.year_to_stats[season][name][wLeagueIndex][lLeagueIndex] += wRank * lScore * goalsMultiplier
 
 
     return f
@@ -176,7 +176,7 @@ def addPageRankToInputs(name):
 
         # League
         A = np.array(self.year_to_stats[season][name])
-        R = pagerank.rank(A, 8)
+        R = pagerank.rank(A, 2)
         new_input.append(R[wLeagueIndex][0])
         new_input.append(R[lLeagueIndex][0])
 
@@ -266,20 +266,20 @@ def addInInputsOutputs(m, data):
     inputs, outputs = m.createInputsAndOutputs(
             data,
             [
-                #setUpPageRank('PageRankWins'), 
-                #setUpPageRank('PageRankGoals'), 
+                setUpPageRank('PageRankWins'), 
+                setUpPageRank('PageRankGoals'), 
                 setUpWinPercent('Wins10'),
                 setUpWinPercent('Wins0'),
             ],
             [
-                #updatePageRank('PageRankWins', 1.0, 0.0),
-                #updatePageRank('PageRankGoals', 0.0, 1.0),
+                updatePageRank('PageRankWins', 1.0, 0.0),
+                updatePageRank('PageRankGoals', 0.0, 1.0),
                 updateWinPercent('Wins10', 10),
                 updateWinPercent('Wins0', 0),
             ],
             [
-                #addPageRankToInputs('PageRankWins'),
-                #addPageRankToInputs('PageRankGoals'),
+                addPageRankToInputs('PageRankWins'),
+                addPageRankToInputs('PageRankGoals'),
                 addWinPercentToInputs('Wins10'),
                 addWinPercentToInputs('Wins0'),
             ])
@@ -294,14 +294,14 @@ def getData():
     m.createInputsAndOutputs(
             data,
             [
-                #setUpPageRank('PageRankWins'), 
-                #setUpPageRank('PageRankGoals'), 
+                setUpPageRank('PageRankWins'), 
+                setUpPageRank('PageRankGoals'), 
                 setUpWinPercent('Wins10'),
                 setUpWinPercent('Wins0'),
             ],
             [
-                #updatePageRank('PageRankWins', 1.0, 0.0),
-                #updatePageRank('PageRankGoals', 0.0, 1.0),
+                updatePageRank('PageRankWins', 1.0, 0.0),
+                updatePageRank('PageRankGoals', 0.0, 1.0),
                 updateWinPercent('Wins10', 10),
                 updateWinPercent('Wins0', 0),
             ],
@@ -330,8 +330,8 @@ def getData():
             [],
             [],
             [
-                #addPageRankToInputs('PageRankWins'),
-                #addPageRankToInputs('PageRankGoals'),
+                addPageRankToInputs('PageRankWins'),
+                addPageRankToInputs('PageRankGoals'),
                 addWinPercentToInputs('Wins10'),
                 addWinPercentToInputs('Wins0'),
             ])
@@ -358,8 +358,8 @@ def getInputs(m, season, team1, team2):
 
     inputs, _ = m.createInputsAndOutputs(
             data, [], [], [
-                #addPageRankToInputs('PageRankWins'),
-                #addPageRankToInputs('PageRankGoals'),
+                addPageRankToInputs('PageRankWins'),
+                addPageRankToInputs('PageRankGoals'),
                 addWinPercentToInputs('Wins10'),
                 addWinPercentToInputs('Wins0'),
             ])

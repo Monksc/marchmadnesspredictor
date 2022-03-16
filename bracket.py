@@ -1,4 +1,4 @@
-
+import random
 
 class Bracket:
 
@@ -15,12 +15,17 @@ class Bracket:
                     self.teams[i*2][0])
             prob = (prob1 + prob2) / 2.0
 
-            if prob * self.teams[i*2][1] > (1.0-prob) * self.teams[i*2+1][1]:
-                newTeams.append((self.teams[i*2][0],
-                    prob * self.teams[i*2][1]))
+            prob1 = prob * self.teams[i*2][1]
+            prob2 = (1.0-prob) * self.teams[i*2+1][1]
+
+            prob = prob1 / (prob1 + prob2)
+
+            #rand = random.random() * random.random() * (1.0 if random.random() > 0.5 else -1.0) / 2 + 0.5
+            if prob > 0.5:
+            #if rand < prob:
+                newTeams.append((self.teams[i*2][0], prob1))
             else:
-                newTeams.append((self.teams[i*2+1][0],
-                    (1.0-prob) * self.teams[i*2+1][1]))
+                newTeams.append((self.teams[i*2+1][0], prob2))
 
         self.teams = newTeams
 
